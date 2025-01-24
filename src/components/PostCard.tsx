@@ -31,6 +31,7 @@ import {
 } from "./ui/sheet";
 import { Separator } from "./ui/separator";
 import { Textarea } from "./ui/textarea";
+import { ScrollArea } from "./ui/scroll-area";
 
 type Posts = Awaited<ReturnType<typeof getPosts>>;
 type Post = Posts[number];
@@ -200,7 +201,7 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: String | null }) {
               </SheetTrigger>
               <SheetContent
                 side={mediumScreen ? "right" : "bottom"}
-                className="lg:side-right w-full h-[80%] sm:w-[120%] md:h-full"
+                className="lg:side-right w-full h-[80%] sm:w-[140%] md:h-full"
               >
                 <SheetHeader className="hidden md:block">
                   <SheetTitle className="flex items-center space-x-3">
@@ -219,41 +220,48 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: String | null }) {
                 <Separator className="hidden md:block my-3" />
                 {/* Comments */}
                 <div className="flex flex-col justify-between md:h-[calc(100vh-150px)] h-[90%]">
-                  {post.comments.length > 0 ? (
-                    post.comments.map((comment) => (
-                      <div key={comment.id} className="flex space-x-3">
-                        <Avatar className="size-8 flex-shrink-0">
-                          <AvatarImage
-                            src={comment.author.image ?? "/avatar.png"}
-                          />
-                        </Avatar>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                            <span className="font-medium text-sm">
-                              {comment.author.name}
-                            </span>
-                            <span className="text-sm text-muted-foreground">
-                              @{comment.author.username}
-                            </span>
-                            <span className="text-sm text-muted-foreground">
-                              ·
-                            </span>
-                            <span className="text-sm text-muted-foreground">
-                              {formatDistanceToNow(new Date(comment.createdAt))}{" "}
-                              ago
-                            </span>
+                  <ScrollArea className="h-full rounded-lg">
+                    {post.comments.length > 0 ? (
+                      post.comments.map((comment) => (
+                        <div
+                          key={comment.id}
+                          className="flex items-center space-x-3"
+                        >
+                          <Avatar className="size-8 flex-shrink-0">
+                            <AvatarImage
+                              src={comment.author.image ?? "/avatar.png"}
+                            />
+                          </Avatar>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                              <span className="font-medium text-sm capitalize">
+                                {comment.author.name}
+                              </span>
+                              {/* <span className="text-sm text-muted-foreground">
+                                @{comment.author.username}
+                              </span> */}
+                              <span className="text-sm text-muted-foreground">
+                                ·
+                              </span>
+                              <span className="text-sm text-muted-foreground">
+                                {formatDistanceToNow(
+                                  new Date(comment.createdAt)
+                                )}{" "}
+                                ago
+                              </span>
+                            </div>
+                            <p className="text-sm break-words">
+                              {comment.content}
+                            </p>
                           </div>
-                          <p className="text-sm break-words">
-                            {comment.content}
-                          </p>
                         </div>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-sm text-muted-foreground flex justify-center items-center">
-                      No comments yet
-                    </p>
-                  )}
+                      ))
+                    ) : (
+                      <p className="text-sm text-muted-foreground flex justify-center items-center">
+                        No comments yet
+                      </p>
+                    )}
+                  </ScrollArea>
                   {/* Add comment  */}
                   {user ? (
                     <div className="">
