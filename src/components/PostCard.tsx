@@ -143,6 +143,7 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: String | null }) {
           {/* Post Image */}
           {post.image && (
             <div className="rounded-lg overflow-hidden">
+              {/* Todo: try implementing fs-lighbox here */}
               <img
                 src={post.image}
                 alt="post content"
